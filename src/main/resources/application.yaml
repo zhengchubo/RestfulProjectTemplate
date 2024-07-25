@@ -1,0 +1,21 @@
+spring:
+  config:
+    additional-location: file:./config/application.properties
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf8
+    username: username
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+  main:
+    # 允许循环引用 spring-boot-starter >= 2.6
+    allow-circular-references: true
+  mvc:
+    pathmatch:
+      # 修复springdoc报错
+      matching-strategy: ANT_PATH_MATCHER
+  threads:
+    # 虚拟线程
+    virtual:
+      enabled: true

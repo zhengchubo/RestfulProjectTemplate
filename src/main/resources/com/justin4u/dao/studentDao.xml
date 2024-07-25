@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.justin4u.dao.StudentDao">
+    <resultMap id="studentMap" type="student">
+        <id property="idCard" column="stu_id_card"/>
+        <result property="id" column="stu_id"/>
+        <result property="name" column="stu_name"/>
+        <result property="deleteFlag" column="sut_delete_flg"/>
+        <collection property="courseList" column="stu_course_id" ofType="Course">
+            <id property="id" column="course_id"/>
+            <result property="name" column="course_name"/>
+            <result property="deleteFlag" column="course_delete_flg"/>
+        </collection>
+    </resultMap>
+    <select id="findStudentById" resultMap="studentMap">
+        select s.*, c.* FROM t_student s LEFT JOIN t_course c ON s.stu_course_id=c.course_id where stu_id_card=#{idCard}
+    </select>
+
+</mapper>

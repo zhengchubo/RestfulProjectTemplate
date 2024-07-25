@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+       default-autowire="byName" default-lazy-init="false">
+
+    <!-- 开启注解 -->
+    <context:component-scan base-package="com.justin4u.message.spring"/>
+
+    <!-- ActiveMQ提供的 -->
+    <bean id="targetConnectionFactoryId" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://localhost:61616"/>
+    </bean>
+
+    <!-- spring提供的连接池 -->
+    <bean id="connectionFactoryId" class="org.springframework.jms.connection.SingleConnectionFactory">
+        <property name="targetConnectionFactory" ref="targetConnectionFactoryId"/>
+    </bean>
+
+    <!-- 创建一个点对点的队列目标对象 -->
+    <bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="my-queue-name"/>
+    </bean>
+
+    <bean id="consumer" class="com.justin4u.message.spring.Consumer"/>
+
+    <bean id="jmsContainerListener" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactoryId"/>
+        <property name="destination" ref="destination"/>
+        <property name="messageListener" ref="consumer"/>
+    </bean>
+</beans>
